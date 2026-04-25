@@ -73,6 +73,72 @@ Client-server chat applications are versatile tools that facilitate real-time co
 
 Client-server chat applications are foundational to real-time communication over networks. They incorporate principles of socket programming, communication protocols, and security mechanisms to provide a seamless user experience. Understanding the basics of client-server chat applications is essential for developers involved in networked application development, as they form the backbone of various collaborative communication systems. As technology evolves, chat applications continue to adapt, incorporating new features and technologies to enhance user interaction and connectivity.
 
+## PROGRAM:
+
+## serverb.py
+```
+import socket
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(("127.0.0.1", 65432))
+server.listen()
+
+print("Waiting for connection...")
+client, addr = server.accept()
+print("Connected to:", addr)
+
+done = False
+
+while not done:
+    msg = client.recv(1024).decode('utf-8')
+
+    if msg == 'quit':
+        print("Client disconnected")
+        done = True
+        break
+    else:
+        print("Client:", msg)
+
+    reply = input("Message: ")
+    client.send(reply.encode('utf-8'))
+
+client.close()
+server.close()
+```
+## client.py
+```
+import socket
+
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(("127.0.0.1", 65432))
+
+done = False
+
+while not done:
+    msg = input("Message: ")
+    client.send(msg.encode('utf-8'))
+
+    if msg == 'quit':
+        break
+
+    reply = client.recv(1024).decode('utf-8')
+
+    if reply == 'quit':
+        done = True
+    else:
+        print("Server:", reply)
+
+client.close()
+```
+
+## OUTPUT:
+
+##serverb.py
+<img width="871" height="333" alt="Screenshot 2026-04-25 103524" src="https://github.com/user-attachments/assets/1d74ca7e-e396-4aa8-875a-94627bf0f85d" />
+
+## client.py
+<img width="866" height="355" alt="Screenshot 2026-04-25 103544" src="https://github.com/user-attachments/assets/a1b51c76-b7cb-49d2-98c0-b84a408a5234" />
+
 
 ## Result:
 
