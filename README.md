@@ -74,71 +74,59 @@ Client-server chat applications are versatile tools that facilitate real-time co
 Client-server chat applications are foundational to real-time communication over networks. They incorporate principles of socket programming, communication protocols, and security mechanisms to provide a seamless user experience. Understanding the basics of client-server chat applications is essential for developers involved in networked application development, as they form the backbone of various collaborative communication systems. As technology evolves, chat applications continue to adapt, incorporating new features and technologies to enhance user interaction and connectivity.
 
 ## PROGRAM:
+CLIENT:
+```
+import socket
+from datetime import datetime
 
-## serverb.py
+s = socket.socket()
+
+s.bind(('localhost',8000))
+
+s.listen(5)
+
+c, addr = s.accept()
+
+print("Client Address : ", addr)
+
+now = datetime.now()
+
+c.send(now.strftime("%d/%m/%Y %H:%M:%S").encode())
+
+ack = c.recv(1024).decode()
+
+if ack:
+    print(ack)
+
+c.close()
+
+```
+SERVER:
 ```
 import socket
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(("127.0.0.1", 65432))
-server.listen()
+s = socket.socket()
 
-print("Waiting for connection...")
-client, addr = server.accept()
-print("Connected to:", addr)
+s.connect(('localhost',8000))
 
-done = False
+print(s.getsockname())
 
-while not done:
-    msg = client.recv(1024).decode('utf-8')
+print(s.recv(1024).decode())
 
-    if msg == 'quit':
-        print("Client disconnected")
-        done = True
-        break
-    else:
-        print("Client:", msg)
+s.send("acknowledgement received from the server".encode())
 
-    reply = input("Message: ")
-    client.send(reply.encode('utf-8'))
-
-client.close()
-server.close()
-```
-## client.py
-```
-import socket
-
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(("127.0.0.1", 65432))
-
-done = False
-
-while not done:
-    msg = input("Message: ")
-    client.send(msg.encode('utf-8'))
-
-    if msg == 'quit':
-        break
-
-    reply = client.recv(1024).decode('utf-8')
-
-    if reply == 'quit':
-        done = True
-    else:
-        print("Server:", reply)
-
-client.close()
 ```
 
 ## OUTPUT:
 
-##serverb.py
-<img width="871" height="333" alt="Screenshot 2026-04-25 103524" src="https://github.com/user-attachments/assets/1d74ca7e-e396-4aa8-875a-94627bf0f85d" />
 
-## client.py
-<img width="866" height="355" alt="Screenshot 2026-04-25 103544" src="https://github.com/user-attachments/assets/a1b51c76-b7cb-49d2-98c0-b84a408a5234" />
+CLIENT:
 
+<img width="945" height="892" alt="image" src="https://github.com/user-attachments/assets/dca2f403-d39d-409a-9e01-7cb9f71b9aa2" />
+
+SERVER:
+
+<img width="936" height="949" alt="image" src="https://github.com/user-attachments/assets/590b60e5-e317-4e47-abf6-dd0711e6a24d" />
 
 ## Result:
 
